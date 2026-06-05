@@ -11,7 +11,7 @@ langgraph_ver = version("langgraph")
 google_genai_ver = version("langchain-google-genai")
 groq_ver = version("langchain-groq")
 
-# Build the structured output string
+# Build the structured config of versions.
 version_config = f"""
 --- Installed Package Versions ---
 LangChain Core:        {core_version}
@@ -30,7 +30,7 @@ def main():
 )
     
     response = gemmi_llm.invoke("Explain RAG in simple terms if you know they say i know")
-    #print(response.content)
+    print(response)
     
     
     
@@ -40,7 +40,7 @@ def main():
 )
 
     response = groq_llm.invoke("What is RAG?in one word")
-    #print(response.content)
+    print(response)
 
 
 if __name__ == "__main__":

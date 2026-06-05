@@ -1,9 +1,15 @@
 langchain
 langgraph
 langchain-core
+langchain-community
+pypdf
+langchain
 
 google-generativeai
 langchain-google-genai
+langchain-chroma
 langchain-groq
 
 python-dotenv
+
+chromadb
