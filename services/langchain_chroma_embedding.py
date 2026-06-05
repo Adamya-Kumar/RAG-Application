@@ -16,36 +16,105 @@ embeddings = HuggingFaceEmbeddings(
 docs = [
     Document(
         page_content="""
-        LangChain is an open-source framework for building applications powered by large language models.
-        It provides components for prompts, chains, agents, memory, and retrieval systems.
-        LangChain supports integrations with OpenAI, Gemini, Anthropic, Groq, and many vector databases.
+        LangChain provides document loaders that allow developers to ingest data
+        from various sources into LLM applications. Document loaders are commonly
+        used in Retrieval-Augmented Generation systems, chatbots, and knowledge bases.
         """,
-        metadata={"source": "langchain_docs"}
+        metadata={
+            "topic": "document_loaders",
+            "page": 1,
+            "source": "langchain_demo.pdf"
+        }
     ),
+
     Document(
         page_content="""
-        Chroma is an open-source vector database designed for AI applications.
-        It stores embeddings and enables semantic search over documents.
-        Chroma can be used with LangChain to build Retrieval-Augmented Generation systems.
+        PyPDFLoader loads PDF files page by page and preserves metadata such as
+        page numbers. It is one of the most commonly used loaders in LangChain.
         """,
-        metadata={"source": "chroma_docs"}
+        metadata={
+            "topic": "pypdfloader",
+            "page": 1,
+            "source": "langchain_demo.pdf"
+        }
     ),
+
     Document(
         page_content="""
-        Retrieval-Augmented Generation, or RAG, combines information retrieval with large language models.
-        Documents are converted into embeddings and stored in a vector database.
-        When a user asks a question, relevant documents are retrieved and passed to the language model.
+        LangChain supports multiple document loaders including TextLoader,
+        CSVLoader, JSONLoader, DirectoryLoader, WebBaseLoader, and YouTubeLoader.
+        Each loader is designed for a specific data source.
         """,
-        metadata={"source": "rag_docs"}
+        metadata={
+            "topic": "loader_types",
+            "page": 1,
+            "source": "langchain_demo.pdf"
+        }
     ),
+
     Document(
         page_content="""
-        Vector embeddings are numerical representations of text.
-        Similar texts produce vectors that are close together in vector space.
-        Embeddings are commonly used for semantic search, recommendation systems, and clustering.
+        After loading documents, text should be split into smaller chunks using
+        RecursiveCharacterTextSplitter. Smaller chunks generally improve retrieval
+        quality in vector databases.
         """,
-        metadata={"source": "embedding_docs"}
+        metadata={
+            "topic": "text_splitting",
+            "page": 2,
+            "source": "langchain_demo.pdf"
+        }
     ),
+
+    Document(
+        page_content="""
+        Metadata preservation is important because it allows applications to
+        provide citations, page references, and source tracking during retrieval.
+        """,
+        metadata={
+            "topic": "metadata",
+            "page": 2,
+            "source": "langchain_demo.pdf"
+        }
+    ),
+
+    Document(
+        page_content="""
+        LangChain provides modular components including prompt templates,
+        output parsers, chains, agents, memory, and vector stores.
+        These components help developers build LLM-powered applications.
+        """,
+        metadata={
+            "topic": "langchain_features",
+            "page": 2,
+            "source": "langchain_demo.pdf"
+        }
+    ),
+
+    Document(
+        page_content="""
+        Vector stores are used for semantic search. Documents are converted into
+        embeddings and stored in a vector database. Queries are also embedded and
+        matched against stored vectors.
+        """,
+        metadata={
+            "topic": "vector_stores",
+            "page": 2,
+            "source": "langchain_demo.pdf"
+        }
+    ),
+
+    Document(
+        page_content="""
+        Document loaders are the entry point for LangChain applications that work
+        with external data. They enable robust RAG systems by connecting PDFs,
+        websites, databases, and other sources to LLM workflows.
+        """,
+        metadata={
+            "topic": "rag",
+            "page": 3,
+            "source": "langchain_demo.pdf"
+        }
+    )
 ]
 
 
@@ -66,9 +135,24 @@ def similarity_search_with_scores():
     result_with_scores=vector_store.similarity_search_with_score(query,k=3)  
     
     for i,(doc,score) in enumerate(result_with_scores):
-        print(f"{i+1}. {doc.page_content} score:{score:.4f} source:{doc.metadata.get("source")}")     
-            
+        print(f"{i+1}. {doc.page_content} similarity:{1/(1+score):.4f} distance:{score:.4f} source:{doc.metadata.get("source")}")     
+   
+   
+def metdata_filtering():
+    vector_store = Chroma.from_documents(documents=docs,embedding=embeddings,persist_directory="./chroma_db")
+    
+    query = "what is rag?"
+    filter_doc={"topic":"rag"}
+    result_with_scores=vector_store.similarity_search(query,k=3,filter=filter_doc)  
+    
+    print(result_with_scores)
+    for i,doc in enumerate(result_with_scores):
+            print(f"{i+1}. {doc.page_content} source:{doc.metadata.get("source")}") 
+   
+   
+           
 if __name__ == __name__:        
     # langchain_chroma_basic()
-    similarity_search_with_scores()
+    #similarity_search_with_scores()
+    metdata_filtering()
             

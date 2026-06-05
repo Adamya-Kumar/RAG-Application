@@ -40,7 +40,7 @@ def pdf_loader(pdf_path:str):
     for i,doc in enumerate(documents):
         print(f"Document {i+1} Content Perview: {doc.page_content[:100]}")
         print(f"Metadata: {doc.metadata}")
-        
+           
         
 if __name__ == "__main__":
     #text_loader()
